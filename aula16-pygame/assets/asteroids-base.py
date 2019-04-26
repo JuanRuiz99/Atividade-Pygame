@@ -90,8 +90,23 @@ class Mob(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         
-
+class Bullet(pygame.sprite.Sprite):
+    
+    def __init__(self):
         
+        pygame.sprite.Sprite.__init__(self)
+        
+        bullet_img = pygame.image.load(path.join(img_dir, "laserRed16.png"))
+        self.image = bullet_img
+        
+        self.rect = self.image.get_rect()
+        
+        self.rect.y = 0
+        
+        self.speedy = -10
+        
+        def update(self):
+            self.rect.y += self.speedy
 
         
     
@@ -121,6 +136,8 @@ boom_sound = pygame.mixer.Sound(path.join(snd_dir, 'expl3.wav'))
 #cria uma nave. O construtor sera chamado automaticamente
 player = Player()
 
+bullets = Bullet()
+
 
 #cria um grupo de sprites e adiciona a nave
 all_sprites = pygame.sprite.Group()
@@ -134,6 +151,10 @@ while i < 8:
     all_mobs.add(mob)
     all_sprites.add(mob)
     i+=1
+    
+all_bullets = pygame.sprite.Group()
+all_bullets.add(bullets)
+all_sprites.add(bullets)
 
 # Comando para evitar travamentos.
 try:
@@ -160,6 +181,8 @@ try:
                     player.speedx = -8
                 if event.key == pygame.K_RIGHT:
                     player.speedx = 8
+                if event.key == pygame.K_SPACE:
+                    bullets.rect.y = player.rect.x
                     
             #verifica se soltou alguma tecla
             if event.type == pygame.KEYUP:
